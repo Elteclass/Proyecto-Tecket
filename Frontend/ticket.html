@@ -7,67 +7,65 @@
     <link rel="stylesheet" href="CSS/style_ticket.css">
 </head>
 <body>
+    <div class="header">
+        <h2><ion-icon name="hammer-outline"></ion-icon>Nuevo Ticket</h2>
+        <button class="btn-create-ticket">Crear ticket</button>
+    </div>
     <div class="container">
-        <div class="header">
-            <h2>Nuevo Ticket</h2>
-            <button class="btn-create-ticket">Crear ticket</button>
-        </div>
-        <div class="main">
-            <div class="form-left">
-                <div class="input-container">
-                    <input type="text" id="" class="input-container-input" required>
-                    <label for="num-control" class="input-container-label">No. Control</label>
-                </div>
-                <div class="input-container">
-                    <input type="text" id="" class="input-container-input" required>
-                    <label for="name" class="input-container-label">Nombre Completo</label>
-                </div>
-                <div class="input-container">
-                    <input type="text" id="" class="input-container-input" required>
-                    <label for="mail" class="input-container-label">Correo</label>
-                </div>
-                <div class="input-box">
-                    <p>Area del problema</p>
-                    <select name="area" id="">
-                        <option value="">Entrada peatonal</option>
-                        <option value="">Edificio academico</option>
-                        <option value="">Edificio Administrativo</option>
-                        <option value="">Edificio 100</option>
-                        <option value="">Edificio 200</option>
-                        <option value="">Edifico 300</option>
-                        <option value="">Edificio 500</option>
-                        <option value="">Edificio 600</option>
-                        <option value="">Edificio 900</option>
-                        <option value="">Cafeteria</option>
-                    </select>
-                </div>
-                <div class="input-box">
-                    <p>Tipo de falla</p>
-                    <select name="failure" id="">
-                        <option value="">Electricidad</option>
-                        <option value="">Mobiliario</option>
-                        <option value="">Plomería</option>
-                        <option value="">Limpieza</option>
-                    </select>
-                </div>
-                <div class="input-container">
-                    <input type="text" id="" class="input-container-input" required>
-                    <label for="description" class="input-container-label">Descripción</label>
-                </div>
+        <div class="form-left">
+            <div class="input-container">
+                <input type="text" id="" class="input-container-input" required>
+                <label for="num-control" class="input-container-label">No. Control</label>
             </div>
-            <div class="form-rigth">
-                <label for="upload-image">
-                    Subir imagen
-                </label>
-                <div class="container-upload-image">
-                    <ion-icon name="image-outline"></ion-icon>
-                    <p>Sube una imagen del problema</p>
-                    <input type="file" accept="image/png, image/jpg">
-                    <p>
-                        <ion-icon name="information-circle-outline"></ion-icon>
-                        Subir tu foto (JPG o PNG, tamaño max: 500KB).
-                    </p>
-                </div>
+            <div class="input-container">
+                <input type="text" id="" class="input-container-input" required>
+                <label for="name" class="input-container-label">Nombre Completo</label>
+            </div>
+            <div class="input-container">
+                <input type="text" id="" class="input-container-input" required>
+                <label for="mail" class="input-container-label">Correo</label>
+            </div>
+            <div class="input-box">
+                <p>Area del problema</p>
+                <select name="area" id="">
+                    <option value="">Entrada peatonal</option>
+                    <option value="">Edificio academico</option>
+                    <option value="">Edificio Administrativo</option>
+                    <option value="">Edificio 100</option>
+                    <option value="">Edificio 200</option>
+                    <option value="">Edifico 300</option>
+                    <option value="">Edificio 500</option>
+                    <option value="">Edificio 600</option>
+                    <option value="">Edificio 900</option>
+                    <option value="">Cafeteria</option>
+                </select>
+            </div>
+            <div class="input-box">
+                <p>Tipo de falla</p>
+                <select name="failure" id="">
+                    <option value="">Electricidad</option>
+                    <option value="">Mobiliario</option>
+                    <option value="">Plomería</option>
+                    <option value="">Limpieza</option>
+                </select>
+            </div>
+            <div class="input-container">
+                <input type="text" id="" class="input-container-input" required>
+                <label for="description" class="input-container-label">Descripción</label>
+            </div>
+        </div>
+        <div class="form-rigth">
+            <label for="upload-image">
+                Subir imagen
+            </label>
+            <div class="container-upload-image">
+                <ion-icon name="image-outline"></ion-icon>
+                <p>Sube una imagen del problema</p>
+                <input type="file" accept="image/png, image/jpg">
+                <p>
+                    <ion-icon name="information-circle-outline"></ion-icon>
+                    Subir tu foto (JPG o PNG, tamaño max: 500KB).
+                </p>
             </div>
         </div>
     </div>
