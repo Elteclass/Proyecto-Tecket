@@ -9,97 +9,87 @@
 <body>
     <div class="header">
         <h2><ion-icon name="hammer-outline"></ion-icon>Nuevo Ticket</h2>
-        <button class="btn-create-ticket">Crear ticket</button>
+        <button class="btn-create-ticket" id="submitBtn">Crear ticket</button>
     </div>
     <div class="container">
-        <div class="form-left">
-            <div class="input-container">
-                <input type="text" id="" class="input-container-input" required>
-                <label for="num-control" class="input-container-label">No. Control</label>
+        <form id="ticketForm" action="../Backend/procesarticket.php" method="POST" enctype="multipart/form-data">
+            <div class="form-content">
+                <div class="form-left">
+                    <div class="input-group">
+                        <label for="nucontrol">No. Control</label>
+                        <input type="text" id="nucontrol" name="nucontrol" class="form-input" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="nombre">Nombre Completo</label>
+                        <input type="text" id="nombre" name="nombre" class="form-input" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="correo">Correo</label>
+                        <input type="email" id="correo" name="correo" class="form-input" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Area del problema</label>
+                        <select name="area" id="area" class="form-select" required>
+                            <option value="Entrada peatonal">Entrada peatonal</option>
+                            <option value="Edificio academico">Edificio academico</option>
+                            <option value="Edificio Administrativo">Edificio Administrativo</option>
+                            <option value="Edificio 100">Edificio 100</option>
+                            <option value="Edificio 200">Edificio 200</option>
+                            <option value="Edificio 300">Edificio 300</option>
+                            <option value="Edificio 500">Edificio 500</option>
+                            <option value="Edificio 600">Edificio 600</option>
+                            <option value="Edificio 900">Edificio 900</option>
+                            <option value="Cafeteria">Cafeteria</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Tipo de falla</label>
+                        <select name="failure" id="failure" class="form-select" required>
+                            <option value="Electricidad">Electricidad</option>
+                            <option value="Mobiliario">Mobiliario</option>
+                            <option value="Plomería">Plomería</option>
+                            <option value="Limpieza">Limpieza</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="descripcion">Descripción</label>
+                        <textarea name="descripcion" id="descripcion" class="form-textarea" required></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-right">
+                    <div class="upload-section">
+                        <label>Subir imagen</label>
+                        <div class="upload-area">
+                            <div class="upload-content">
+                                <img src="IMG/subir-foto.svg" alt="Subir imagen">
+                                <p>Sube una imagen del problema</p>
+                                <span class="upload-info">
+                                    <ion-icon name="information-circle-outline"></ion-icon>
+                                    Subir tu foto (JPG o PNG, tamaño max: 500KB).
+                                </span>
+                            </div>
+                            <input id="upload-image" name="imagen" class="upload-input" type="file" accept="image/png, image/jpg">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="input-container">
-                <input type="text" id="" class="input-container-input" required>
-                <label for="name" class="input-container-label">Nombre Completo</label>
-            </div>
-            <div class="input-container">
-                <input type="text" id="" class="input-container-input" required>
-                <label for="mail" class="input-container-label">Correo</label>
-            </div>
-            <div class="input-box">
-                <p>Area del problema</p>
-                <select name="area" id="">
-                    <option value="">Entrada peatonal</option>
-                    <option value="">Edificio academico</option>
-                    <option value="">Edificio Administrativo</option>
-                    <option value="">Edificio 100</option>
-                    <option value="">Edificio 200</option>
-                    <option value="">Edifico 300</option>
-                    <option value="">Edificio 500</option>
-                    <option value="">Edificio 600</option>
-                    <option value="">Edificio 900</option>
-                    <option value="">Cafeteria</option>
-                </select>
-            </div>
-            <div class="input-box">
-                <p>Tipo de falla</p>
-                <select name="failure" id="">
-                    <option value="">Electricidad</option>
-                    <option value="">Mobiliario</option>
-                    <option value="">Plomería</option>
-                    <option value="">Limpieza</option>
-                </select>
-            </div>
-            <div class="input-container">
-                <textarea class="input-container-input input-description" required></textarea>
-                <label for="description" class="input-container-label">Descripción</label>
-            </div>
-        </div>
-        <div class="form-rigth">
-            <label for="upload-image">Subir imagen</label>
-            <div class="container-upload-image">
-                <img src="IMG/subir-foto.svg" alt="">
-                <p>Sube una imagen del problema</p>
-                <input id="upload-image" class="upload-failure" type="file" accept="image/png, image/jpg">
-                <p class="accept-values">
-                    <ion-icon name="information-circle-outline"></ion-icon>
-                    Subir tu foto (JPG o PNG, tamaño max: 500KB).
-                </p>
-            </div>
-        </div>
+        </form>
     </div>
 
+    <script>
+        // Script para enviar el formulario cuando se hace clic en el botón "Crear ticket"
+        document.querySelector('.btn-create-ticket').addEventListener('click', function() {
+            document.getElementById('ticketForm').submit();
+        });
+    </script>
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 </html>
-
-
-<!--
-                <p>No. Control</p>
-                <input type="text" placeholder="Ingrese su número de control">
-                <p>Nombre Completo</p>
-                <input type="text" placeholder="Ingrese su nombre completo">
-                <p>Área del problema</p>
-                <select name="area" id="">
-                    <option value="">Entrada peatonal</option>
-                    <option value="">Edificio academico</option>
-                    <option value="">Edificio Administrativo</option>
-                    <option value="">Edificio 100</option>
-                    <option value="">Edificio 200</option>
-                    <option value="">Edifico 300</option>
-                    <option value="">Edificio 500</option>
-                    <option value="">Edificio 600</option>
-                    <option value="">Edificio 900</option>
-                    <option value="">Cafeteria</option>
-                </select>
-                <p>Tipo de falla</p>
-                <select name="failure" id="">
-                    <option value="">Electricidad</option>
-                    <option value="">Mobiliario</option>
-                    <option value="">Plomería</option>
-                    <option value="">Limpieza</option>
-                </select>
-                <p>Descripción</p>
-                <input type="text" placeholder="Ingresa una descripción breve sobre el problema">
--->
