@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - TECKET</title>
+    <link rel="stylesheet" href="CSS/admin.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="IMG/logo_admin.png" alt="TECKET Logo" class="logo">
+        </div>
+        <nav class="menu">
+            <ul>
+                <li class="active"><a href="#"><ion-icon name="ticket-outline"></ion-icon> Tickets</a></li>
+                <li class="logout"><a href="index.html"><ion-icon name="log-out-outline"></ion-icon> Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <div class="header-content">
+                <h1><ion-icon name="construct-outline"></ion-icon> Panel de Administración</h1>
+                <div class="user-info">
+                    <span>Administrador</span>
+                    <ion-icon name="person-circle-outline"></ion-icon>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard">
+            <div class="stats-cards">
+                <div class="card">
+                    <div class="card-icon pending">
+                        <ion-icon name="hourglass-outline"></ion-icon>
+                    </div>
+                    <div class="card-info">
+                        <h3>Pendientes</h3>
+                        <p id="pending-count">0</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon in-progress">
+                        <ion-icon name="reload-outline"></ion-icon>
+                    </div>
+                    <div class="card-info">
+                        <h3>En Proceso</h3>
+                        <p id="in-progress-count">0</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon resolved">
+                        <ion-icon name="checkmark-done-outline"></ion-icon>
+                    </div>
+                    <div class="card-info">
+                        <h3>Resueltos</h3>
+                        <p id="resolved-count">0</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon total">
+                        <ion-icon name="documents-outline"></ion-icon>
+                    </div>
+                    <div class="card-info">
+                        <h3>Total</h3>
+                        <p id="total-count">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-container">
+                <div class="filter-group">
+                    <label for="status-filter">Estado:</label>
+                    <select id="status-filter" class="filter-select">
+                        <option value="all">Todos</option>
+                        <option value="pending">Pendientes</option>
+                        <option value="in-progress">En Proceso</option>
+                        <option value="resolved">Resueltos</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="area-filter">Área:</label>
+                    <select id="area-filter" class="filter-select">
+                        <option value="all">Todas</option>
+                        <option value="Entrada peatonal">Entrada peatonal</option>
+                        <option value="Edificio academico">Edificio académico</option>
+                        <option value="Edificio Administrativo">Edificio Administrativo</option>
+                        <option value="Edificio 100">Edificio 100</option>
+                        <option value="Edificio 200">Edificio 200</option>
+                        <option value="Edificio 300">Edificio 300</option>
+                        <option value="Edificio 500">Edificio 500</option>
+                        <option value="Edificio 600">Edificio 600</option>
+                        <option value="Edificio 900">Edificio 900</option>
+                        <option value="Cafeteria">Cafetería</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="failure-filter">Tipo de falla:</label>
+                    <select id="failure-filter" class="filter-select">
+                        <option value="all">Todas</option>
+                        <option value="Electricidad">Electricidad</option>
+                        <option value="Mobiliario">Mobiliario</option>
+                        <option value="Plomería">Plomería</option>
+                        <option value="Limpieza">Limpieza</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <button id="reset-filters" class="btn-reset">Restablecer filtros</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="tickets-table" class="display">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>No. Control</th>
+                            <th>Nombre</th>
+                            <th>Área</th>
+                            <th>Tipo de Falla</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Los datos se cargarán dinámicamente desde PHP -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para ver detalles del ticket -->
+    <div id="ticket-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Detalles del Ticket</h2>
+            <div class="ticket-details">
+                <div class="ticket-info">
+                    <div class="info-group">
+                        <label>ID:</label>
+                        <span id="modal-id"></span>
+                    </div>
+                    <div class="info-group">
+                        <label>No. Control:</label>
+                        <span id="modal-nucontrol"></span>
+                    </div>
+                    <div class="info-group">
+                        <label>Nombre:</label>
+                        <span id="modal-nombre"></span>
+                    </div>
+                    <div class="info-group">
+                        <label>Correo:</label>
+                        <span id="modal-correo"></span>
+                    </div>
+                    <div class="info-group">
+                        <label>Área:</label>
+                        <span id="modal-area"></span>
+                    </div>
+                    <div class="info-group">
+                        <label>Tipo de Falla:</label>
+                        <span id="modal-failure"></span>
+                    </div>
+                    <div class="info-group">
+                        <label>Fecha:</label>
+                        <span id="modal-fecha"></span>
+                    </div>
+                    <div class="info-group">
+                        <label>Estado:</label>
+                        <div class="status-selector">
+                            <select id="modal-status">
+                                <option value="pending">Pendiente</option>
+                                <option value="in-progress">En Proceso</option>
+                                <option value="resolved">Resuelto</option>
+                            </select>
+                            <button id="save-status" class="btn-save">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="ticket-description">
+                    <label>Descripción:</label>
+                    <p id="modal-descripcion"></p>
+                </div>
+                <div class="ticket-image">
+                    <label>Imagen:</label>
+                    <img id="modal-imagen" src="/placeholder.svg" alt="Imagen del problema">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery y DataTables -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <!-- Script personalizado -->
+    <script src="JS/admin.js"></script>
+    <!-- Iconos -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
