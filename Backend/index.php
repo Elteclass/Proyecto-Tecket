@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["user_name"] = $user["nombre"];
             // Como no hay campo 'rol', asignamos un rol por defecto
             $_SESSION["user_role"] = "admin";
-            header("Location: ../Frontend/ticket.html");
+            header("Location: ../Frontend/admin.html");
             exit();
         } else {
             // Contraseña incorrecta
