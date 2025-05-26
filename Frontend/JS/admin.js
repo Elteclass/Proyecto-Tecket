@@ -9,16 +9,13 @@ $(document).ready(() => {
     ajax: {
       url: "../Backend/get_tickets.php",
       dataSrc: (json) => {
-        // Para depuración
         console.log("Datos recibidos:", json)
 
-        // Si hay un error, mostrarlo en la consola
         if (json && json.error) {
           console.error("Error del servidor:", json.error)
           return []
         }
 
-        // Si json es null o undefined, devolver un array vacío
         if (!json) {
           console.error("No se recibieron datos")
           return []
@@ -43,15 +40,15 @@ $(document).ready(() => {
           switch (data) {
             case "pending":
               statusClass = "status-pending"
-              statusText = "Pendiente"
+              statusText = "pendiente"
               break
             case "in-progress":
               statusClass = "status-in-progress"
-              statusText = "En Proceso"
+              statusText = "proceso"
               break
             case "resolved":
               statusClass = "status-resolved"
-              statusText = "Resuelto"
+              statusText = "resuelto"
               break
             default:
               statusClass = "status-pending"
@@ -64,18 +61,18 @@ $(document).ready(() => {
       {
         data: null,
         render: (data) => `
-                        <div class="action-buttons">
-                            <button class="btn-view" data-id="${data.id}">
-                                <ion-icon name="eye-outline"></ion-icon>
-                            </button>
-                            <button class="btn-edit" data-id="${data.id}">
-                                <ion-icon name="create-outline"></ion-icon>
-                            </button>
-                            <button class="btn-delete" data-id="${data.id}">
-                                <ion-icon name="trash-outline"></ion-icon>
-                            </button>
-                        </div>
-                    `,
+                    <div class="action-buttons">
+                        <button class="btn-view" data-id="${data.id}">
+                            <ion-icon name="eye-outline"></ion-icon>
+                        </button>
+                        <button class="btn-edit" data-id="${data.id}">
+                            <ion-icon name="create-outline"></ion-icon>
+                        </button>
+                        <button class="btn-delete" data-id="${data.id}">
+                            <ion-icon name="trash-outline"></ion-icon>
+                        </button>
+                    </div>
+                `,
       },
     ],
     initComplete: () => {
@@ -86,7 +83,7 @@ $(document).ready(() => {
   // Función para actualizar los contadores de tickets
   function updateTicketCounts() {
     $.ajax({
-      url: "../Backend/get_ticket_counts.php",
+      url: "../Backend/get_ticket_count.php",
       type: "GET",
       dataType: "json",
       success: (data) => {
@@ -109,24 +106,23 @@ $(document).ready(() => {
     })
   }
 
-  // Filtros para la tabla - Modificados para aplicarse automáticamente al cambiar
+  // Filtros para la tabla
   $("#status-filter").on("change", function () {
     const value = $(this).val()
 
     if (value === "all") {
       ticketsTable.column(6).search("").draw()
     } else {
-      // Mapear los valores del dropdown a los valores en la tabla
       let searchValue = ""
       switch (value) {
         case "pending":
-          searchValue = "Pendiente"
+          searchValue = "pendiente"
           break
         case "in-progress":
-          searchValue = "En Proceso"
+          searchValue = "proceso"
           break
         case "resolved":
-          searchValue = "Resuelto"
+          searchValue = "resuelto"
           break
       }
       ticketsTable.column(6).search(searchValue).draw()
@@ -193,6 +189,7 @@ $(document).ready(() => {
       success: (data) => {
         if (data && data.error) {
           console.error("Error al cargar detalles:", data.error)
+          alert("Error al cargar los detalles del ticket: " + data.error)
           return
         }
 
@@ -209,12 +206,31 @@ $(document).ready(() => {
         $("#modal-status").val(data.estado || "pending")
 
         // Mostrar imagen si existe
-        if (data.imagen) {
-          $("#modal-imagen")
-            .attr("src", "../uploads/" + data.imagen)
+        const modalImagen = $("#modal-imagen")
+        const imageContainer = modalImagen.parent()
+
+        // Limpiar mensajes anteriores
+        imageContainer.find("p").remove()
+
+        if (data.imagen && data.imagen !== null) {
+          console.log("Ruta de imagen:", data.imagen)
+          
+          modalImagen
+            .attr("src", "../" + data.imagen)
+            .attr("alt", `Imagen del ticket ${data.id}`)
             .show()
+            .off("error")
+            .on("error", function () {
+              console.error("Error al cargar imagen:", "../" + data.imagen)
+              $(this).hide()
+              imageContainer.find("label").after("<p>No se pudo cargar la imagen</p>")
+            })
+            .on("load", function() {
+              console.log("Imagen cargada correctamente:", "../" + data.imagen)
+            })
         } else {
-          $("#modal-imagen").hide()
+          modalImagen.hide()
+          imageContainer.find("label").after("<p>No hay imagen disponible</p>")
         }
 
         // Mostrar el modal
@@ -223,6 +239,7 @@ $(document).ready(() => {
       error: (xhr, status, error) => {
         console.error("Error AJAX al cargar detalles:", error)
         console.error("Respuesta:", xhr.responseText)
+        alert("Error al cargar los detalles del ticket")
       },
     })
   }
@@ -231,6 +248,12 @@ $(document).ready(() => {
   $("#save-status").on("click", function () {
     const ticketId = $("#modal-id").text()
     const newStatus = $("#modal-status").val()
+
+    // Validar que tenemos los datos necesarios
+    if (!ticketId || !newStatus) {
+      alert("Error: Datos incompletos")
+      return
+    }
 
     // Mostrar indicador de carga
     const originalText = $(this).text()
@@ -245,31 +268,39 @@ $(document).ready(() => {
       },
       dataType: "json",
       success: (response) => {
+        console.log("Respuesta del servidor:", response)
+
         if (response && response.error) {
           console.error("Error al actualizar estado:", response.error)
           alert("Error al actualizar el estado: " + response.error)
-          $("#save-status").prop("disabled", false).text(originalText)
           return
         }
 
-        console.log("Estado actualizado correctamente:", response)
+        if (response && response.success) {
+          console.log("Estado actualizado correctamente")
 
-        // Cerrar el modal
-        modal.style.display = "none"
+          // Cerrar el modal
+          modal.style.display = "none"
 
-        // Recargar la tabla
-        ticketsTable.ajax.reload()
+          // Recargar la tabla
+          ticketsTable.ajax.reload(null, false)
 
-        // Actualizar contadores
-        updateTicketCounts()
+          // Actualizar contadores
+          updateTicketCounts()
 
-        // Restaurar el botón
-        $("#save-status").prop("disabled", false).text(originalText)
+          // Mostrar mensaje de éxito
+          alert("Estado actualizado correctamente")
+        } else {
+          alert("Error: Respuesta inesperada del servidor")
+        }
       },
       error: (xhr, status, error) => {
         console.error("Error AJAX al actualizar estado:", error)
         console.error("Respuesta:", xhr.responseText)
         alert("Error al actualizar el estado. Por favor, inténtalo de nuevo.")
+      },
+      complete: () => {
+        // Restaurar el botón
         $("#save-status").prop("disabled", false).text(originalText)
       },
     })
@@ -278,8 +309,7 @@ $(document).ready(() => {
   // Editar ticket
   $(document).on("click", ".btn-edit", function () {
     const ticketId = $(this).data("id")
-    // Redirigir a la página de edición
-    window.location.href = `edit_ticket.php?id=${ticketId}`
+    window.location.href = `../Frontend/edit_ticket.php?id=${ticketId}`
   })
 
   // Eliminar ticket
@@ -292,8 +322,10 @@ $(document).ready(() => {
         type: "POST",
         data: { id: ticketId },
         success: (response) => {
+          console.log("Ticket eliminado")
+
           // Recargar la tabla
-          ticketsTable.ajax.reload()
+          ticketsTable.ajax.reload(null, false)
 
           // Actualizar contadores
           updateTicketCounts()
@@ -301,6 +333,7 @@ $(document).ready(() => {
         error: (xhr, status, error) => {
           console.error("Error AJAX al eliminar ticket:", error)
           console.error("Respuesta:", xhr.responseText)
+          alert("Error al eliminar el ticket")
         },
       })
     }
@@ -311,4 +344,7 @@ $(document).ready(() => {
     ticketsTable.ajax.reload(null, false)
     updateTicketCounts()
   }, 30000)
+
+  // Cargar contadores al inicio
+  updateTicketCounts()
 })

@@ -11,6 +11,20 @@ if ($conn->connect_error) {
     die("Error de conexión: " . $conn->connect_error);
 }
 
+// Función para mapear estados de DB a frontend
+function mapEstadoToFrontend($estado) {
+    switch($estado) {
+        case 'pendiente':
+            return 'pending';
+        case 'proceso':
+            return 'in-progress';
+        case 'resuelto':
+            return 'resolved';
+        default:
+            return 'pending'; // Por defecto
+    }
+}
+
 // Verificar la estructura de la tabla
 try {
     // Consulta para obtener todos los tickets con el mapeo correcto
@@ -37,10 +51,8 @@ try {
     if ($result->num_rows > 0) {
         // Recorrer los resultados y agregarlos al array
         while($row = $result->fetch_assoc()) {
-            // Convertir el estado a los valores esperados por el frontend
-            if ($row["estado"] === null || $row["estado"] === "" || empty($row["estado"])) {
-                $row["estado"] = "pending";
-            }
+            // Mapear el estado de la base de datos al formato del frontend
+            $row["estado"] = mapEstadoToFrontend($row["estado"]);
             
             $tickets[] = $row;
         }
