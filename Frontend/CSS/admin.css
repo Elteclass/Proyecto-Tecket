@@ -238,7 +238,8 @@ table.display {
   border-collapse: collapse;
 }
 
-table.display th, table.display td {
+table.display th,
+table.display td {
   padding: 12px 15px;
   text-align: left;
   border-bottom: 1px solid #ddd;
@@ -285,7 +286,9 @@ table.display tbody tr:hover {
   gap: 5px;
 }
 
-.btn-view, .btn-edit, .btn-delete {
+.btn-view,
+.btn-edit,
+.btn-delete {
   padding: 5px;
   border: none;
   border-radius: 5px;
@@ -444,34 +447,34 @@ table.display tbody tr:hover {
     width: 70px;
     overflow: hidden;
   }
-  
+
   .logo-container {
     padding: 10px;
   }
-  
+
   .logo {
     width: 50px;
   }
-  
+
   .menu li a span {
     display: none;
   }
-  
+
   .menu li {
     display: flex;
     justify-content: center;
     padding: 15px 0;
   }
-  
+
   .menu li a {
     font-size: 20px;
   }
-  
+
   .main-content {
     margin-left: 70px;
     width: calc(100% - 70px);
   }
-  
+
   .ticket-details {
     grid-template-columns: 1fr;
   }
@@ -481,11 +484,11 @@ table.display tbody tr:hover {
   .stats-cards {
     grid-template-columns: 1fr;
   }
-  
+
   .filter-container {
     flex-direction: column;
   }
-  
+
   .header-content {
     flex-direction: column;
     gap: 10px;

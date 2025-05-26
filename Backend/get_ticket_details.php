@@ -15,6 +15,20 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $id = $_GET['id'];
 
+// Función para mapear estados de DB a frontend
+function mapEstadoToFrontend($estado) {
+    switch($estado) {
+        case 'pendiente':
+            return 'pending';
+        case 'proceso':
+            return 'in-progress';
+        case 'resuelto':
+            return 'resolved';
+        default:
+            return 'pending'; // Por defecto
+    }
+}
+
 try {
     // Consulta para obtener los detalles del ticket con el mapeo correcto
     $sql = "SELECT 
@@ -26,7 +40,8 @@ try {
                 asunto as failure, 
                 descripcion, 
                 fecha_creacion as fecha, 
-                estado 
+                estado,
+                imagen
             FROM tickets 
             WHERE id = ?";
 
@@ -43,13 +58,33 @@ try {
         // Obtener los detalles del ticket
         $ticket = $result->fetch_assoc();
         
-        // Convertir el estado a los valores esperados por el frontend
-        if ($ticket["estado"] === null || $ticket["estado"] === "" || empty($ticket["estado"])) {
-            $ticket["estado"] = "pending";
-        }
+        // Mapear el estado de la base de datos al formato del frontend
+        $ticket["estado"] = mapEstadoToFrontend($ticket["estado"]);
         
-        // Verificar si hay una imagen asociada (esto es un ejemplo, ajusta según tu estructura)
-        $ticket["imagen"] = null; // Por defecto no hay imagen
+        // Procesar el campo imagen
+        if ($ticket["imagen"] !== null && !empty($ticket["imagen"])) {
+            // Si el campo imagen contiene datos BLOB, convertirlos a string
+            $imageName = $ticket["imagen"];
+            // Si es un BLOB, convertir a string
+            if (is_resource($imageName)) {
+                $imageName = stream_get_contents($imageName);
+            }
+            
+            // Limpiar el nombre del archivo
+            $imageName = trim($imageName);
+            
+            // Verificar si el archivo existe en la carpeta uploads
+            $imagePath = "../uploads/" . $imageName;
+            if (file_exists($imagePath)) {
+                // Construir la ruta relativa correcta para el frontend
+                $ticket["imagen"] = "uploads/" . $imageName;
+            } else {
+                // Si no existe el archivo, establecer como null
+                $ticket["imagen"] = null;
+            }
+        } else {
+            $ticket["imagen"] = null;
+        }
         
         // Cerrar conexión
         $stmt->close();
